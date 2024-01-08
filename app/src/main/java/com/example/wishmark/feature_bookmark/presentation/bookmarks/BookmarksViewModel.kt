@@ -55,7 +55,7 @@ class BookmarksViewModel @Inject constructor(
 
     }
 
-    suspend fun onEvent(event: BookmarksEvent) {
+    fun onEvent(event: BookmarksEvent) {
         when (event) {
             is BookmarksEvent.DeleteBookmark -> {
                 launchIn {

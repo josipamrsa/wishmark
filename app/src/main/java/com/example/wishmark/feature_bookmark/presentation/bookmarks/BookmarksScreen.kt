@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.presentation.base.StateScreenWithMainScaffold
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.components.BookmarkItem
 import com.example.wishmark.feature_bookmark.presentation.util.Screen
@@ -20,6 +21,7 @@ import com.example.wishmark.feature_bookmark.presentation.util.shared.InfoDispla
 @Composable
 fun BookmarksScreenBody(
     bookmarks: List<BookmarkItemState>,
+    onDeleteBookmark: (Bookmark) -> Unit
 ) {
     if (bookmarks.isNullOrEmpty()) {
         InfoDisplayHandler(message = "No wishmarks to display")
@@ -31,7 +33,8 @@ fun BookmarksScreenBody(
     ) {
         items(bookmarks) { bookmark ->
             BookmarkItem(
-                bookmarkItem = bookmark
+                bookmarkItem = bookmark,
+                onDeleteBookmark = onDeleteBookmark
             )
         }
     }
@@ -53,7 +56,10 @@ fun BookmarksScreen(
         fabAction = { navController.navigate(Screen.AddBookmarkScreen.route) },
     ) {
         BookmarksScreenBody(
-            bookmarks = bookmarksState.bookmarks
+            bookmarks = bookmarksState.bookmarks,
+            onDeleteBookmark = {
+                viewModel.onEvent(BookmarksEvent.DeleteBookmark(it))
+            }
         )
     }
 }

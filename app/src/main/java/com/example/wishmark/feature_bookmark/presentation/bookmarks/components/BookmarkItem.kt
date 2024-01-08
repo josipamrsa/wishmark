@@ -1,6 +1,8 @@
 package com.example.wishmark.feature_bookmark.presentation.bookmarks.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,18 +15,27 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.Category
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarkItemState
+import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksEvent
 import com.fresh.materiallinkpreview.models.OpenGraphMetaData
 import com.fresh.materiallinkpreview.ui.CardLinkPreview
 import com.fresh.materiallinkpreview.ui.CardLinkPreviewProperties
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookmarkItem(
     bookmarkItem: BookmarkItemState,
+    onDeleteBookmark: (Bookmark) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier
+            .padding(20.dp)
+            .combinedClickable (
+                onClick = {},
+                onLongClick = { onDeleteBookmark(bookmarkItem.bookmark) }
+            )
     ) {
         Text(
             text = bookmarkItem.bookmark.title,
