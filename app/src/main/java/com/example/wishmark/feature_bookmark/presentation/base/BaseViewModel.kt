@@ -95,3 +95,7 @@ interface UIState {
     data class Error(val throwable: Throwable) : UIState
     data class Success<out R>(val resource: R) : UIState
 }
+
+interface UIEvent {
+
+}

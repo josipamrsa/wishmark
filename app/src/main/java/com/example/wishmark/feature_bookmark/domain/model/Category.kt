@@ -3,6 +3,7 @@ package com.example.wishmark.feature_bookmark.domain.model
 import androidx.compose.ui.graphics.Color
 
 enum class Category {
+    NONE(Color.Transparent),
     TECHNOLOGY(Color.hsl(250f, 0.69f, 0.45f)),
     FASHION(Color.hsl(278f, 0.69f, 0.45f)),
     BEAUTY(Color.hsl(297f, 0.69f, 0.45f)),

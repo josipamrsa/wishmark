@@ -74,7 +74,6 @@ class BookmarksViewModel @Inject constructor(
         }
     }
 
-
     suspend fun downloadLinkMetaData(link: String): OpenGraphMetaData? {
         return openGraphMetaDataProvider.startFetchingMetadataAsync(URL(link)).getOrNull()
     }

@@ -12,8 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.wishmark.feature_bookmark.presentation.base.StateScreenWithScaffold
+import com.example.wishmark.feature_bookmark.presentation.base.StateScreenWithMainScaffold
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.components.BookmarkItem
+import com.example.wishmark.feature_bookmark.presentation.util.Screen
 import com.example.wishmark.feature_bookmark.presentation.util.shared.InfoDisplayHandler
 
 @Composable
@@ -46,10 +47,10 @@ fun BookmarksScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    StateScreenWithScaffold(
+    StateScreenWithMainScaffold(
         uiState = uiState,
         isFabVisible = true,
-        fabAction = { /*TODO*/ },
+        fabAction = { navController.navigate(Screen.AddBookmarkScreen.route) },
     ) {
         BookmarksScreenBody(
             bookmarks = bookmarksState.bookmarks

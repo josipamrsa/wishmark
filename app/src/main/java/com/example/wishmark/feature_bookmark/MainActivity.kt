@@ -10,9 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.wishmark.feature_bookmark.presentation.add_bookmark.AddEditBookmarkScreen
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksScreen
 import com.example.wishmark.feature_bookmark.presentation.util.Screen
 import com.example.wishmark.ui.theme.WishmarkTheme
@@ -34,8 +37,24 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = Screen.BookmarksScreen.route
                     ) {
-                        composable(route = Screen.BookmarksScreen.route) {
+                        composable(
+                            route = Screen.BookmarksScreen.route
+                        ) {
                             BookmarksScreen(navController = navController)
+                        }
+
+                        composable(
+                            route = "${Screen.AddBookmarkScreen.route}" +
+                                    "?bookmarkId={bookmarkId}",
+                            arguments = listOf(
+                                navArgument(name = "bookmarkId") {
+                                    type = NavType.IntType
+                                    defaultValue = -1
+                                }
+                            )
+                        ) {
+
+                            AddEditBookmarkScreen(navController = navController)
                         }
                     }
 
