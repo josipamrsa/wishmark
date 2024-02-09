@@ -18,6 +18,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.Category
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarkItemState
+import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksContract
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksEvent
 import com.fresh.materiallinkpreview.models.OpenGraphMetaData
 import com.fresh.materiallinkpreview.ui.CardLinkPreview

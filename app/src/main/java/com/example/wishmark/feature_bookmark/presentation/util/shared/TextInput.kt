@@ -1,16 +1,14 @@
 package com.example.wishmark.feature_bookmark.presentation.util.shared
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +21,19 @@ import androidx.compose.ui.unit.sp
 fun TextInputWithHint(
     title: String,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    isError: Boolean = false,
+    supportingText: @Composable (() -> Unit)? = null,
+    placeholder:  @Composable (() -> Unit)? = null,
+    label: @Composable (() -> Unit)? = null,
+    textStyle: TextStyle = TextStyle.Default.copy(
+        fontSize = 18.sp,
+        color = Color.White,
+    ),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -37,15 +47,19 @@ fun TextInputWithHint(
                 .padding(5.dp)
         )
 
-        BasicTextField(
+        OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             singleLine = true,
-            textStyle = TextStyle(
-                fontSize = 18.sp,
-                color = Color.White,
-            ),
-            modifier = Modifier.padding(5.dp)
+            enabled = enabled,
+            isError = isError,
+            supportingText = supportingText,
+            placeholder = placeholder,
+            label = label,
+            textStyle = textStyle,
+            modifier = modifier.padding(5.dp),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
         )
 
         Divider(

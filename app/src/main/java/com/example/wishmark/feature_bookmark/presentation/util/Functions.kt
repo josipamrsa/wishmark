@@ -10,3 +10,5 @@ suspend fun <T> trySuspended(action: suspend () -> T): Result<T> {
         Result.failure(e)
     }
 }
+
+fun <T> T.isNull() = this == null

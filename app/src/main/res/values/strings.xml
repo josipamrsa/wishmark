@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Wishmark</string>
+    <string name="wm_screen_add_edit_bookmark_title">Add a new wishmark</string>
+    <string name="wm_header_title">Title</string>
+    <string name="wm_header_link">Link</string>
+    <string name="wm_enter_title">Enter title…</string>
+    <string name="wm_enter_link">Enter link…</string>
+    <string name="wm_select_category">Select category…</string>
+    <string name="wm_add_to_wishlist">Add to wishlist</string>
+    <string name="wm_title_empty_error">Please specify a title of your wishmark</string>
+    <string name="wm_link_empty_error">Please specify a link to your wishmark</string>
+    <string name="wm_category_not_selected">Please specify a category of your wishmark</string>
 </resources>

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.wishmark.feature_bookmark.presentation.base.UIState
+import com.example.wishmark.feature_bookmark.presentation.base.BaseContract
 
 @Composable
 fun InfoMessageText(
@@ -24,13 +24,13 @@ fun InfoMessageText(
 }
 
 @Composable
-fun ErrorDisplayHandler(error: UIState.Error, color: Color = Color.Red) {
+fun ErrorDisplayHandler(error: BaseContract.BaseState.OnError, color: Color = Color.Red) {
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        error.throwable.message?.let {
+        error.error.message?.let {
             InfoMessageText(
                 message = it,
                 color = color
