@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
-import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarkItemState
-import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksContract
-import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksEvent
+import com.example.wishmark.feature_bookmark.presentation.util.toItemCategory
 import com.fresh.materiallinkpreview.models.OpenGraphMetaData
 import com.fresh.materiallinkpreview.ui.CardLinkPreview
 import com.fresh.materiallinkpreview.ui.CardLinkPreviewProperties
@@ -55,7 +54,7 @@ fun BookmarkItem(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        BookmarkItemCategory(category = bookmarkItem.bookmark.category)
+        BookmarkItemCategory(category = toItemCategory(bookmarkItem.bookmark.category) ?: ItemCategory.NONE)
 
     }
 }
@@ -79,7 +78,7 @@ fun BookmarkItemLinkMetadata(
 
 @Composable
 fun BookmarkItemCategory(
-    category: Category
+    category: ItemCategory
 ) {
     Box(
         modifier = Modifier

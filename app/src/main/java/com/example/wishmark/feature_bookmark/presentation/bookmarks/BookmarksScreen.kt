@@ -4,16 +4,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -25,7 +22,6 @@ import com.example.wishmark.feature_bookmark.presentation.base.utils.collectInLa
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.components.BookmarkItem
 import com.example.wishmark.feature_bookmark.presentation.util.Screen
 import com.example.wishmark.feature_bookmark.presentation.util.shared.InfoDisplayHandler
-import kotlinx.coroutines.flow.collectLatest
 
 fun NavGraphBuilder.bookmarksScreen(
     navigator: NavHostController,

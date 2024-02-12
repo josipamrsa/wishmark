@@ -1,10 +1,11 @@
 package com.example.wishmark.feature_bookmark.presentation.bookmarks
 
+import androidx.lifecycle.viewModelScope
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
-import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 import com.example.wishmark.feature_bookmark.domain.use_case.BookmarkUseCases
 import com.example.wishmark.feature_bookmark.presentation.base.BaseViewModel
-import com.fresh.materiallinkpreview.models.OpenGraphMetaData
+import com.example.wishmark.feature_bookmark.presentation.util.toCategory
 import com.fresh.materiallinkpreview.parsing.OpenGraphMetaDataProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import java.net.URL
 import javax.inject.Inject
@@ -34,10 +36,18 @@ class BookmarksViewModel @Inject constructor(
 
     override fun onEvent(event: BookmarksContract.Event) {
         when (event) {
-            is BookmarksContract.Event.OnGetAllBookmarks -> launchIn { getBookmarks() }
+            is BookmarksContract.Event.OnGetAllBookmarks -> launchIn {
+                getBookmarks()
+                //fillWithBookmarksTest()
+            }
+
             is BookmarksContract.Event.OnDeleteBookmark -> {}
             is BookmarksContract.Event.OnRestoreBookmark -> {}
-            is BookmarksContract.Event.OnCreateNewBookmark -> launchIn { effectFlow.emit(BookmarksContract.Effect.OnCreateNewBookmark) }
+            is BookmarksContract.Event.OnCreateNewBookmark -> launchIn {
+                effectFlow.emit(
+                    BookmarksContract.Effect.OnCreateNewBookmark
+                )
+            }
         }
     }
 
@@ -56,34 +66,38 @@ class BookmarksViewModel @Inject constructor(
                         }
                     )
                 }
-
-            }
+            }.stateIn(viewModelScope)
 
             effectFlow.emit(BookmarksContract.Effect.OnBookmarksFetched)
         }
+    }
 
 
-        // TODO proper testing lol
+    // TODO proper testing lol
 
-        /* TESTS */
-        fun fillWithBookmarksTest() {
-
-            val testBookmarks = listOf<Bookmark>(
-                Bookmark("Flipper Zero", "https://flipperzero.one/", Category.TECHNOLOGY),
-                Bookmark(
-                    "Apple iPad 9 64GB",
-                    "https://www.sancta-domenica.hr/komunikacije/tableti/tablet-apple-10-2-inch-ipad-9-wi-fi-64gb-space-grey.html",
-                    Category.TECHNOLOGY
-                )
-            )
-
-            launchIn {
-                testBookmarks.forEach { bookmark ->
-                    bookmarkUseCases.addBookmark(bookmark)
-                }
-            }
-
+    /* TESTS */
+    fun fillWithBookmarksTest() {
+        val b1 = Bookmark().apply {
+            this.title = "Flipper Zero"
+            this.link = "https://flipperzero.one/"
+            this.category = toCategory(ItemCategory.TECHNOLOGY)
         }
 
+        val b2 = Bookmark().apply {
+            this.title = "Apple iPad 9 64GB"
+            this.link =
+                "https://www.sancta-domenica.hr/komunikacije/tableti/tablet-apple-10-2-inch-ipad-9-wi-fi-64gb-space-grey.html"
+            this.category = toCategory(ItemCategory.TECHNOLOGY)
+        }
+
+        val testBookmarks = listOf<Bookmark>(
+            b1, b2
+        )
+
+        launchIn {
+            testBookmarks.forEach { bookmark ->
+                bookmarkUseCases.addBookmark(bookmark)
+            }
+        }
     }
 }

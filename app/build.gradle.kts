@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-kapt")
+    id("io.realm.kotlin")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
 }
@@ -96,6 +97,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-paging:2.6.1")
+
+    // RealmDB
+    implementation("io.realm.kotlin:library-base:1.11.0")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")

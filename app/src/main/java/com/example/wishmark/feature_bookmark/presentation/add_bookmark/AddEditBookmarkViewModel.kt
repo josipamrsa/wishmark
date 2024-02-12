@@ -6,9 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import com.example.wishmark.R
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 import com.example.wishmark.feature_bookmark.domain.use_case.BookmarkUseCases
 import com.example.wishmark.feature_bookmark.presentation.base.BaseContract
 import com.example.wishmark.feature_bookmark.presentation.base.BaseViewModel
+import com.example.wishmark.feature_bookmark.presentation.util.toCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -72,7 +74,7 @@ class AddEditBookmarkViewModel @Inject constructor(
         }
     }
 
-    private fun handleCategoryChanged(category: Category) {
+    private fun handleCategoryChanged(category: ItemCategory) {
         mutableState.update {
             it.copy(category = category)
         }
@@ -81,12 +83,11 @@ class AddEditBookmarkViewModel @Inject constructor(
     private suspend fun addNewBookmark() {
         launchWithProgressIn {
             bookmarkUseCases.addBookmark(
-                Bookmark(
-                    title = mutableState.value.title,
-                    link = mutableState.value.link,
-                    category = mutableState.value.category,
-                    id = mutableState.value.id
-                )
+                Bookmark().apply {
+                    this.title = mutableState.value.title
+                    this.link = mutableState.value.link
+                    this.category = toCategory(mutableState.value.category)
+                }
             )
 
             effectFlow.emit(AddEditBookmarkContract.Effect.OnNavigateToBookmarkScreen)

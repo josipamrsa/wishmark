@@ -5,7 +5,7 @@ import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.Category
 import com.example.wishmark.feature_bookmark.domain.repository.BookmarkRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import org.mongodb.kbson.ObjectId
 
 class BookmarkRepositoryImpl(
     private val dao: BookmarkDao
@@ -14,7 +14,7 @@ class BookmarkRepositoryImpl(
         return dao.getAllBookmarks()
     }
 
-    override suspend fun getBookmark(id: Int): Bookmark? {
+    override suspend fun getBookmark(id: ObjectId): Bookmark? {
         return dao.getBookmark(id)
     }
 

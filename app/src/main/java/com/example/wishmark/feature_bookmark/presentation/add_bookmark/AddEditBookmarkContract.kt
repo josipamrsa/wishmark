@@ -1,7 +1,8 @@
 package com.example.wishmark.feature_bookmark.presentation.add_bookmark
 
 import androidx.annotation.StringRes
-import com.example.wishmark.feature_bookmark.domain.model.Category
+//import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 import com.example.wishmark.feature_bookmark.presentation.base.BaseUnidirectionalViewModel
 import com.example.wishmark.feature_bookmark.presentation.base.UnidirectionalViewModel
 
@@ -10,7 +11,7 @@ interface AddEditBookmarkContract :
     data class State(
         val title: String = "",
         val link: String = "",
-        val category: Category = Category.NONE,
+        val category: ItemCategory = ItemCategory.NONE,
         val id: Int? = null,
         @StringRes val titleErrorRes: Int? = null,
         @StringRes val linkErrorRes: Int? = null,
@@ -20,8 +21,8 @@ interface AddEditBookmarkContract :
     sealed class Event {
         data class OnTitleChanged(val title: String) : Event()
         data class OnLinkChanged(val link: String) : Event()
-        data class OnCategorySelected(val category: Category) : Event()
-        data object OnSaveBookmark: Event()
+        data class OnCategorySelected(val category: ItemCategory) : Event()
+        data object OnSaveBookmark : Event()
     }
 
     sealed class Effect {
