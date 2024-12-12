@@ -41,6 +41,7 @@ class AddEditBookmarkViewModel @Inject constructor(
             is AddEditBookmarkContract.Event.OnLinkChanged -> handleLinkChanged(event.link)
             is AddEditBookmarkContract.Event.OnCategorySelected -> handleCategoryChanged(event.category)
             is AddEditBookmarkContract.Event.OnSaveBookmark -> launchIn { addNewBookmark() }
+            else -> {}
         }
     }
 

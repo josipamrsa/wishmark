@@ -1,5 +1,6 @@
 package com.example.wishmark.feature_bookmark.presentation.bookmarks
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
@@ -54,6 +55,7 @@ class BookmarksViewModel @Inject constructor(
     private suspend fun getBookmarks() {
         launchWithProgressIn {
             bookmarkUseCases.getBookmarks().onEach { data ->
+                Log.d("WISHMARK", data.map { it._id }.toString())
                 mutableState.update {
                     it.copy(
                         bookmarks = data.map {

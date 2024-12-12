@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -64,6 +65,7 @@ fun BookmarksScreenBody(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("BOOKMARK_DISPLAY")
     ) {
         items(bookmarks) { bookmarkItem ->
             BookmarkItem(

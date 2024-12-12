@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import com.example.wishmark.feature_bookmark.presentation.base.BaseContract
 
 @Composable
@@ -49,7 +50,10 @@ fun InfoDisplayHandler(
     color: Color = Color.DarkGray
 ) {
     Row(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("INFO_HANDLER_CONTAINER")
+        ,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
