@@ -11,9 +11,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(category: ItemCategory) {
     Box(
         modifier = Modifier
             .background(

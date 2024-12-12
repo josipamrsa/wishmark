@@ -23,9 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 
 @Composable
-fun CategoryMenu(selectCategory: (Category) -> Unit) {
+fun CategoryMenu(selectCategory: (ItemCategory) -> Unit) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -56,8 +57,8 @@ fun CategoryMenu(selectCategory: (Category) -> Unit) {
             },
 
             ) {
-            Category.entries
-                .filter { it != Category.NONE }
+            ItemCategory.entries
+                .filter { it != ItemCategory.NONE }
                 .forEach { option ->
                     DropdownMenuItem(
                         text = {

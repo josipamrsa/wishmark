@@ -1,30 +1,42 @@
 package com.example.wishmark.feature_bookmark.data.data_source
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
-import com.example.wishmark.feature_bookmark.domain.model.Category
-import kotlinx.coroutines.flow.Flow
+//import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.presentation.util.isNull
+import io.realm.kotlin.Realm
+import io.realm.kotlin.ext.query
+import kotlinx.coroutines.flow.map
+import org.mongodb.kbson.ObjectId
+import javax.inject.Inject
 
-@Dao
-interface BookmarkDao {
-    @Query("SELECT * FROM bookmark")
-    fun getAllBookmarks(): Flow<List<Bookmark>>
+class BookmarkDao @Inject constructor(
+    private val realm: Realm
+) {
+    fun getAllBookmarks() = realm.query<Bookmark>().asFlow().map { results ->
+        results
+        results.list.toList()
+    }
 
-    @Query("SELECT * FROM bookmark WHERE id  = :id")
-    suspend fun getBookmark(id: Int): Bookmark?
+    fun getBookmark(id: ObjectId) = realm.query<Bookmark>("_id == $0", id).find().first()
 
-    @Query("SELECT * FROM bookmark WHERE category = :category")
-    fun getBookmarksByCategory(category: Category): Flow<List<Bookmark>>
+    fun getBookmarksByCategory(category: String) =
+        realm.query<Bookmark>("category.name == $0", category).find()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBookmark(bookmark: Bookmark)
+    suspend fun insertBookmark(bookmark: Bookmark) = realm.write {
+        /*findLatest(bookmark)?.let {
+            bookmark.title = it.title
+            bookmark.link = it.link
+            bookmark.category = it.category
+        } ?: */copyToRealm(bookmark)
+    }
 
-    @Delete
-    suspend fun deleteBookmark(bookmark: Bookmark)
-
-
+    fun deleteBookmark(bookmark: Bookmark): () -> Unit = {
+        val frozenBookmark = realm.query<Bookmark>("_id == $0", bookmark._id).find().first()
+        realm.writeBlocking {
+            if (frozenBookmark.isNull().not())
+                findLatest(frozenBookmark)?.also {
+                    delete(it)
+                }
+        }
+    }
 }

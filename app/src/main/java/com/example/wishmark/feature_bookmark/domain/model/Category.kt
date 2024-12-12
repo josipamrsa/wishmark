@@ -1,8 +1,9 @@
 package com.example.wishmark.feature_bookmark.domain.model
 
 import androidx.compose.ui.graphics.Color
+import io.realm.kotlin.types.RealmObject
 
-enum class Category {
+enum class ItemCategory {
     NONE(Color.Transparent),
     TECHNOLOGY(Color.hsl(250f, 0.69f, 0.45f)),
     FASHION(Color.hsl(278f, 0.69f, 0.45f)),
@@ -18,3 +19,8 @@ enum class Category {
         this.color = color
     }
 }
+
+class Category : RealmObject {
+    var name: String? = ItemCategory.NONE.name
+}
+

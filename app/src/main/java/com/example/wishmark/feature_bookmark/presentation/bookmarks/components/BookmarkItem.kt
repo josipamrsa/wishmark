@@ -11,14 +11,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
-import com.example.wishmark.feature_bookmark.domain.model.Category
+import com.example.wishmark.feature_bookmark.domain.model.ItemCategory
 import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarkItemState
-import com.example.wishmark.feature_bookmark.presentation.bookmarks.BookmarksEvent
+import com.example.wishmark.feature_bookmark.presentation.util.toItemCategory
 import com.fresh.materiallinkpreview.models.OpenGraphMetaData
 import com.fresh.materiallinkpreview.ui.CardLinkPreview
 import com.fresh.materiallinkpreview.ui.CardLinkPreviewProperties
@@ -42,7 +43,9 @@ fun BookmarkItem(
             style = TextStyle(
                 fontSize = 20.sp,
             ),
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier
+                .padding(5.dp)
+                .testTag("BOOKMARK_ITEM_TITLE")
         )
 
         Spacer(modifier = Modifier.padding(2.dp))
@@ -54,7 +57,7 @@ fun BookmarkItem(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        BookmarkItemCategory(category = bookmarkItem.bookmark.category)
+        BookmarkItemCategory(category = toItemCategory(bookmarkItem.bookmark.category) ?: ItemCategory.NONE)
 
     }
 }
@@ -78,7 +81,7 @@ fun BookmarkItemLinkMetadata(
 
 @Composable
 fun BookmarkItemCategory(
-    category: Category
+    category: ItemCategory
 ) {
     Box(
         modifier = Modifier

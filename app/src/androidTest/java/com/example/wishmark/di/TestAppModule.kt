@@ -20,33 +20,26 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
-
-    /*@Provides
-    @Singleton
-    fun provideWishmarkDatabase(app: Application): BookmarkDatabase {
-        return Room.databaseBuilder(
-            app,
-            BookmarkDatabase::class.java,
-            BookmarkDatabase.DATABASE_NAME
-        ).build()
-    }*/
+object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideRealmDatabase() : Realm {
-        val config = RealmConfiguration.create(
+    fun provideTestRealmDatabase(): Realm = Realm.open(
+        RealmConfiguration.Builder(
             schema = setOf(
                 Bookmark::class,
                 Category::class
             )
         )
-        return Realm.open(config)
-    }
+            .inMemory()
+            .name("realm-test")
+            .build()
+    )
+
 
     @Provides
     @Singleton
-    fun provideBookmarkRepository(dao: BookmarkDao) : BookmarkRepository {
+    fun provideBookmarkRepository(dao: BookmarkDao): BookmarkRepository {
         return BookmarkRepositoryImpl(dao)
     }
 

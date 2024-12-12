@@ -1,33 +1,32 @@
 package com.example.wishmark.feature_bookmark.data.repository
 
-import com.example.wishmark.feature_bookmark.data.data_source.BookmarkDao
 import com.example.wishmark.feature_bookmark.domain.model.Bookmark
 import com.example.wishmark.feature_bookmark.domain.model.Category
 import com.example.wishmark.feature_bookmark.domain.repository.BookmarkRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.mongodb.kbson.ObjectId
 
-class BookmarkRepositoryImpl(
-    private val dao: BookmarkDao
-) : BookmarkRepository{
+class FakeBookmarkRepository : BookmarkRepository {
+    private val bookmarks = mutableListOf<Bookmark>()
     override fun getAllBookmarks(): Flow<List<Bookmark>> {
-        return dao.getAllBookmarks()
+        return flow { emit(bookmarks) }
     }
 
     override suspend fun getBookmark(id: ObjectId): Bookmark? {
-        return dao.getBookmark(id)
+        return bookmarks.find { it._id == id }
     }
 
     override fun getBookmarksByCategory(category: Category): Flow<List<Bookmark>> {
-        return getBookmarksByCategory(category)
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertBookmark(bookmark: Bookmark) {
-        dao.insertBookmark(bookmark)
+        bookmarks.add(bookmark)
     }
 
     override suspend fun deleteBookmark(bookmark: Bookmark) {
-        dao.deleteBookmark(bookmark)
+        bookmarks.remove(bookmark)
     }
 
 }

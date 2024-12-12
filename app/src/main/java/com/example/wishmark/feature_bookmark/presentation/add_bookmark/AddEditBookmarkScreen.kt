@@ -1,6 +1,5 @@
 package com.example.wishmark.feature_bookmark.presentation.add_bookmark
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,66 +7,74 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.example.wishmark.feature_bookmark.domain.model.Category
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.wishmark.R
 import com.example.wishmark.feature_bookmark.presentation.add_bookmark.components.CategoryItem
 import com.example.wishmark.feature_bookmark.presentation.add_bookmark.components.CategoryMenu
+import com.example.wishmark.feature_bookmark.presentation.base.BaseContract
+import com.example.wishmark.feature_bookmark.presentation.base.BaseRoute
 import com.example.wishmark.feature_bookmark.presentation.util.shared.TextInputWithHint
 import com.example.wishmark.feature_bookmark.presentation.base.StateScreenWithSecondaryScaffold
-import com.example.wishmark.feature_bookmark.presentation.base.UIState
-import kotlinx.coroutines.flow.collectLatest
+import com.example.wishmark.feature_bookmark.presentation.base.utils.collectInLaunchedEffect
+import com.example.wishmark.feature_bookmark.presentation.util.Screen
+import com.example.wishmark.feature_bookmark.presentation.util.isNull
 
+fun NavGraphBuilder.addBookmarkScreen(
+    navigator: NavHostController,
+    onNavigateToBookmarkScreen: () -> Unit
+) {
+    composable(
+        route = "${Screen.AddBookmarkScreen.route}?bookmarkId={bookmarkId}",
+        arguments = listOf(navArgument(name = "bookmarkId") {
+            type = NavType.IntType
+            defaultValue = -1
+        })
+    ) {
+        val viewModel = hiltViewModel<AddEditBookmarkViewModel>()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
+        viewModel.effect.collectInLaunchedEffect { effect ->
+            when (effect) {
+                is AddEditBookmarkContract.Effect.OnNavigateToBookmarkScreen -> {
+                    onNavigateToBookmarkScreen()
+                }
+            }
+        }
+
+        BaseRoute(
+            baseViewModel = viewModel,
+            navigator = navigator
+        ) {
+            AddEditBookmarkScreen(
+                state = state,
+                onEvent = viewModel::onEvent
+            )
+        }
+    }
+}
 
 @Composable
 fun AddEditBookmarkScreen(
-    navController: NavController,
-    viewModel: AddEditBookmarkViewModel = hiltViewModel()
+    state: AddEditBookmarkContract.State,
+    onEvent: (AddEditBookmarkContract.Event) -> Unit
 ) {
 
-    val uiState by viewModel.mutableStateFlow.collectAsStateWithLifecycle()
-    val titleState = viewModel.singleBookmarkState.value.title
-    val linkState = viewModel.singleBookmarkState.value.link
-    val categoriesState = viewModel.singleBookmarkState.value.category
-
-
-    LaunchedEffect(key1 = true) {
-        viewModel.mutableStateFlow.collectLatest {
-            if (it == UIState.Success(AddEditBookmarkEvent.SaveBookmark)) {
-                navController.navigateUp()
-            }
-        }
-    }
-
-    // TODO goes to vm
-    var selectedCategory by remember {
-        mutableStateOf(Category.NONE)
-    }
-
     StateScreenWithSecondaryScaffold(
-        uiState = UIState.Idle,
-        scaffoldTitle = "Add a new wishmark"
+        baseState = BaseContract.BaseState.OnIdle,
+        scaffoldTitle = stringResource(id = R.string.wm_screen_add_edit_bookmark_title)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -88,12 +95,11 @@ fun AddEditBookmarkScreen(
                 ) {
                     CategoryMenu(
                         selectCategory = {
-                            viewModel.onEvent(AddEditBookmarkEvent.SelectedCategory(it))
+                            onEvent(AddEditBookmarkContract.Event.OnCategorySelected(it))
                         }
                     )
 
-                    if (categoriesState != Category.NONE)
-                        CategoryItem(categoriesState)
+                    CategoryItem(state.category)
                 }
 
 
@@ -103,29 +109,43 @@ fun AddEditBookmarkScreen(
                 )
 
                 TextInputWithHint(
-                    title = "Title",
-                    value = titleState,
+                    title = stringResource(id = R.string.wm_header_title),
+                    value = state.title,
                     onValueChange = {
-                        viewModel.onEvent(AddEditBookmarkEvent.TypingTitle(it))
+                        onEvent(AddEditBookmarkContract.Event.OnTitleChanged(it))
+                    },
+                    placeholder = { Text(text = stringResource(id = R.string.wm_enter_title)) },
+                    isError = state.title.isNull(),
+                    supportingText = {
+                        state.titleErrorRes?.let {
+                            Text(text = stringResource(id = it))
+                        }
                     }
                 )
 
                 TextInputWithHint(
-                    title = "Link",
-                    value = linkState,
+                    title = stringResource(id = R.string.wm_header_link),
+                    value = state.link,
                     onValueChange = {
-                        viewModel.onEvent(AddEditBookmarkEvent.TypingLink(it))
+                        onEvent(AddEditBookmarkContract.Event.OnLinkChanged(it))
+                    },
+                    placeholder = { Text(text = stringResource(id = R.string.wm_enter_link)) },
+                    isError = state.link.isNull(),
+                    supportingText = {
+                        state.linkErrorRes?.let {
+                            Text(text = stringResource(id = it))
+                        }
                     }
                 )
             }
 
             Button(
                 onClick = {
-                    viewModel.onEvent(AddEditBookmarkEvent.SaveBookmark)
+                    onEvent(AddEditBookmarkContract.Event.OnSaveBookmark)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "ADD TO WISHLIST")
+                Text(text = stringResource(id = R.string.wm_add_to_wishlist).uppercase())
             }
         }
     }
